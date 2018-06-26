@@ -12,14 +12,22 @@ import { AppComponent } from './app.component';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
+import { AppRoutingModule, routingComponents } from './app-routing.module';
+import { NavbarComponent } from './navbar/navbar.component';
+import { PostDetailComponent } from './post-detail/post-detail.component'; // Archivo de rutas
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    routingComponents,
+    NavbarComponent,
+    PostDetailComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    AppRoutingModule,
 	NgbModule.forRoot()
   ],
   providers: [

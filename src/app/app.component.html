@@ -1,37 +1,9 @@
+<app-navbar></app-navbar>
 <div class="row">
   <div class="col-md-2"></div>
   <div class="col-md-8">
-
-    <div class="todos" *ngIf="postList">
-      <table class="table">
-        <thead class="h">
-          <tr class="h">
-            <th class="h">Title</th>
-            <th class="h">Link</th>
-            <th class="h">Votes</th>
-          </tr>
-        </thead>
-        <tbody>
-          
-          <tr class="todo" *ngFor="let post of postList">
-
-              <a href=#><td>{{post.title}}</td></a>
-              <td>{{post.link}}</td>
-              <td>{{post.votes}}</td>
-            
-            <td>
-              <button class="btn btn-primary" (click)="editTodo(todo)">
-                  <i  class="fa fa-pencil"></i>
-                </button>
-              <button class="btn btn-danger" (click)="deleteTodo(todo)">
-                  <i  class="fa fa-trash"></i>
-                </button>
-            </td>
-
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    
+    <router-outlet></router-outlet>
 
 
     <form>
