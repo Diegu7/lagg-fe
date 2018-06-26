@@ -49,7 +49,7 @@ export class PostService {
     .map(res  => {
       //Maps the response object sent from the server
         
-      return res.posts as Post[];
+      return res["posts"] as Post[];
     })
   }
 
