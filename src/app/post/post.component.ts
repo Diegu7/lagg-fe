@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Post from '../models/post';
 import {PostService} from '../services/post';
+import {Router} from '@angular/router'
 
 @Component({
   selector: 'app-post',
@@ -22,9 +23,8 @@ import {PostService} from '../services/post';
           <tr class="todo" *ngFor="let post of postList">
 
               <td (click)="onSelect(post)">{{post.title}}</td>
-              <td>{{post.link}}</td>
+              <a href="http://{{post.link}}/" target="_blank"><td>{{post.link}}</td></a>
               <td>{{post.votes}}</td>
-            
             <td>
               <button class="btn btn-primary" (click)="editTodo(todo)">
                   <i  class="fa fa-pencil"></i>
@@ -45,7 +45,7 @@ import {PostService} from '../services/post';
 })
 export class PostComponent implements OnInit {
 
-  constructor(private postService: PostService) { 
+  constructor(private postService: PostService, private router: Router) { 
     
   }
 
@@ -62,6 +62,11 @@ export class PostComponent implements OnInit {
         this.postList = posts
         console.log(posts)
       })
+  }
+
+  onSelect(post) {
+    console.log("caca");
+    this.router.navigate(['/posts', post.post_id]);
   }
 
 }
