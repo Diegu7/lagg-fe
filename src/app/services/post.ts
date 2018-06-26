@@ -15,28 +15,6 @@ export class PostService {
   constructor(private http: HttpClient) {
     this.url = GLOBAL.url + 'posts';
   }
-  /*
-
-  signIn(user_to_login, gethash = null) {
-    if (gethash != null) {
-      user_to_login.gethash = gethash;
-    }
-    let json = JSON.stringify(user_to_login);
-    let params = json;
-
-    let headers = new Headers({'content-type': 'application/json'});
-
-    return this._http.post(this.url + 'login', params, {headers: headers})
-      .map(res => res.json());
-  }
-
-  getUsers() {
-
-    const headers = new Headers({'content-type': 'application/json'});
-
-    return this._http.get(this.url + 'users')
-      .map(res => res.json());
-  }*/
 
   createPost(post: Post): Observable<any>{
     //returns the observable of http post request 
@@ -50,6 +28,14 @@ export class PostService {
       //Maps the response object sent from the server
         
       return res["posts"] as Post[];
+    })
+  }
+
+  deletePost(id:string):any{
+    let deleteUrl = `${this.url}/${id}`
+    return this.http.delete(deleteUrl)
+    .map(res =>{
+      return res;
     })
   }
 

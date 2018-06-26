@@ -14,7 +14,7 @@ import {Router} from '@angular/router'
         <thead class="h">
           <tr class="h">
             <th class="h">Title</th>
-            <th class="h">Link</th>
+            <th class="h">Comments</th>
             <th class="h">Votes</th>
           </tr>
         </thead>
@@ -22,14 +22,11 @@ import {Router} from '@angular/router'
           
           <tr class="todo" *ngFor="let post of postList">
 
-              <td (click)="onSelect(post)">{{post.title}}</td>
-              <a href="http://{{post.link}}/" target="_blank"><td>{{post.link}}</td></a>
-              <td>{{post.votes}}</td>
+            <td><a href="{{post.link}}" target="_blank">{{post.title}} <font size="1">({{post.link}})</font></a></td>
+            <td (click)="onSelect(post)">Comments</td>
+            <td>{{post.votes}}</td>
             <td>
-              <button class="btn btn-primary" (click)="editTodo(todo)">
-                  <i  class="fa fa-pencil"></i>
-                </button>
-              <button class="btn btn-danger" (click)="deleteTodo(todo)">
+              <button class="btn btn-danger" (click)="delete(post)">
                   <i  class="fa fa-trash"></i>
                 </button>
             </td>
@@ -40,6 +37,20 @@ import {Router} from '@angular/router'
     </div>
     </div>
     </div>
+    <form>
+      <div class="form-row">
+
+        <div class="col-md-5">
+          <input type="text" name="title" id="title" [(ngModel)]="newPost.title" placeholder="Title" class="form-control">
+        </div>
+        <div class="col-md-5">
+          <input name="link" id="link" [(ngModel)]="newPost.link" placeholder="Link" class="form-control">
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary" (click)="create()">Add</button>
+        </div>
+      </div>
+    </form>
   `,
   styles: []
 })
@@ -53,20 +64,34 @@ export class PostComponent implements OnInit {
 
   postList: Post[];
 
-  	ngOnInit(): void {
+  ngOnInit(): void {
 
     //At component initialization the 
     this.postService.getPosts()
       .subscribe(posts => {
         //assign the todolist property to the proper http response
         this.postList = posts
-        console.log(posts)
       })
   }
 
   onSelect(post) {
-    console.log("caca");
     this.router.navigate(['/posts', post.post_id]);
+  }
+
+  create() {
+    this.postService.createPost(this.newPost)
+      .subscribe((res) => {
+        this.postList.push(res.posts)
+        this.newPost = new Post()
+        console.log(res)
+      })
+  }
+
+  delete(post: Post) {
+    console.log(post);
+    this.postService.deletePost(post.post_id.toString()).subscribe(res =>{
+      this.postList.splice(this.postList.indexOf(post), 1);
+    })
   }
 
 }

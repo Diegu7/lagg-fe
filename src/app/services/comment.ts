@@ -13,31 +13,23 @@ export class CommentService {
   public identity = true;
   public token;
 
-  constructor(private _http: HttpClient) {
-    this.url = GLOBAL.url;
-  }
-  /*
-
-  signIn(user_to_login, gethash = null) {
-    if (gethash != null) {
-      user_to_login.gethash = gethash;
-    }
-    let json = JSON.stringify(user_to_login);
-    let params = json;
-
-    let headers = new Headers({'content-type': 'application/json'});
-
-    return this._http.post(this.url + 'login', params, {headers: headers})
-      .map(res => res.json());
+  constructor(private http: HttpClient) {
+    this.url = GLOBAL.url + 'comments';
   }
 
-  getUsers() {
+  getComments(id:string): Observable<any>{
+    return this.http.get(`${this.url}/${id}`)
+    .map(res  => {
+      //Maps the response object sent from the server
+        
+      return res["comments"] as Comment[];
+    })
+  }
 
-    const headers = new Headers({'content-type': 'application/json'});
-
-    return this._http.get(this.url + 'users')
-      .map(res => res.json());
-  }*/
+  createComment(comment: Comment): Observable<any>{
+    //returns the observable of http post request 
+    return this.http.post(`${this.url}/${comment.post_id}`, comment);
+  }
 
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only

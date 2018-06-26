@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import Post from '../models/post';
+import Comment from '../models/comment';
 import {PostService} from '../services/post';
+import {CommentService} from '../services/comment';
 import { ActivatedRoute } from '@angular/router'
 
 @Component({
@@ -26,20 +28,34 @@ import { ActivatedRoute } from '@angular/router'
                   <td (click)="onSelect(post)">{{post.title}}</td>
                   <a href="http://{{post.link}}/" target="_blank"><td>{{post.link}}</td></a>
                   <td>{{post.votes}}</td>
-                  <td>
-                    <button class="btn btn-primary" (click)="editTodo(todo)">
-                      <i  class="fa fa-pencil"></i>
-                    </button>
-                    <button class="btn btn-danger" (click)="deleteTodo(todo)">
-                      <i  class="fa fa-trash"></i>
-                    </button>
-                  </td>
                 </ng-template>
               </tr>
               
             </tbody>
           </table>
+          
         </div>
+        <h3>Comments!</h3>
+        <hr>
+        <div *ngIf="commentList">
+          <div *ngFor="let comment of commentList; index as i">
+            <p>{{i + 1}} - {{comment.body}}</p>
+            <hr>
+          </div>
+        </div>
+
+        <form>
+          <div class="form-row">
+
+            <div class="col-md-5">
+              <input type="text" name="body" id="body" [(ngModel)]="newComment.body" placeholder="Comment" class="form-control">
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="btn btn-primary" (click)="createComment()">Add</button>
+            </div>
+          </div>
+        </form>
+
       </div>
     </div>
   `,
@@ -47,7 +63,7 @@ import { ActivatedRoute } from '@angular/router'
 })
 export class PostDetailComponent implements OnInit {
 
-  constructor(private postService: PostService,private route: ActivatedRoute) { }
+  constructor(private postService: PostService, private commentService: CommentService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
 
@@ -56,14 +72,30 @@ export class PostDetailComponent implements OnInit {
       .subscribe(posts => {
         //assign the todolist property to the proper http response
         this.postList = posts
-        console.log(posts)
       })
 
       let id = parseInt(this.route.snapshot.paramMap.get('id'));
       this.currentPost = id;
+    this.commentService.getComments(id.toString())
+      .subscribe(comments =>{
+        this.commentList = comments
+      })
+  }
+
+  createComment(){
+    this.newComment.post_id = this.currentPost;
+    this.commentService.createComment(this.newComment)
+    .subscribe((res) => {
+      this.commentList.push(res.comments)
+      this.newComment = new Comment()
+      console.log(res)
+    })
   }
 
   postList: Post[];
+  commentList: Comment[];
   public currentPost;
+
+  public newComment: Comment = new Comment();
 
 }

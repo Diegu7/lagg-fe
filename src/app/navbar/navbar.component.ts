@@ -16,9 +16,6 @@ import { Component, OnInit } from '@angular/core';
         <a class="nav-link" routerLink="/posts" routerLinkActive="">All posts<span class="sr-only">(current)</span></a>
       </li>
     </ul>
-    <span class="navbar-text">
-      {{currentUser}}
-    </span>
   </div>
 </nav>
   `,
